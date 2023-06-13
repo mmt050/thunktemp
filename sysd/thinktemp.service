@@ -1,0 +1,24 @@
+[Unit]
+Description=Thinkpad sensor reading smoothing
+After=network.target
+StartLimitIntervalSec=0
+After=network-target.service
+Wants=network-target.service
+
+[Service]
+Type=idle
+User=root
+Group=root
+Restart=always
+RestartSec=2
+User=root
+#ExecStart=/home/myles/tmp/clevo-indicator/bin/clevo-fancontrol -1
+ExecStart=python3 /home/myles/dev/thinkpad-temp-sensor-input/app/main.py --app-loglevel INFO --inputs temp1_input --output /dev/shm/thinktemp --period 2 --keep-cnt 20
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=thinktemp
+
+[Install]
+WantedBy=graphical.target
+
